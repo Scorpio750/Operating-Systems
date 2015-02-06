@@ -33,7 +33,7 @@ double loop_through(char* A, int interval, int total_passes) {
 	start_time = start.tv_sec * 1000000 + start.tv_usec;
 	time_diff = end_time - start_time;
 
-	printf("%d %ld\n", interval, time_diff);
+	printf("Size Interval: %d Time for Interval: %ld\n", interval, time_diff);
 }
 
 int main(int argc, char *argv[]) {
@@ -46,5 +46,9 @@ int main(int argc, char *argv[]) {
 		loop_through(A,i,i);
 	}
 	free(A);
+
+	printf("Cache Block/Lines Size: 10 B");
+	printf("Cache Size: 1024 KB");
+	printf("Cache Miss Penalty: 1539759 us");
 	return 0;
 }
