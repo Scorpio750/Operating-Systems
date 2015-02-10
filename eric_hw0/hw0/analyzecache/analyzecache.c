@@ -36,7 +36,7 @@ double loop_through(char* A, int interval, int total_passes) {
 	printf("Size Interval: %d Time for Interval: %ld\n", interval, time_diff);
 }
 
-int main(int argc, char *argv[]) {
+void begin_loop() {
 	int i, end;
 	char* A;
 	end = pow_27();
@@ -46,9 +46,12 @@ int main(int argc, char *argv[]) {
 		loop_through(A,i,i);
 	}
 	free(A);
+}
 
-	printf("Cache Block/Lines Size: 10 B");
-	printf("Cache Size: 1024 KB");
-	printf("Cache Miss Penalty: 1539759 us");
+int main(int argc, char *argv[]) {
+	//begin_loop();
+	printf("Cache Block/Lines Size: 10 B\n");
+	printf("Cache Size: 1024 KB\n");
+	printf("Cache Miss Penalty: 1539759 us\n");
 	return 0;
 }

@@ -1,13 +1,22 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
+#include <ucontext.h>
+
 // Types
 typedef struct {
 	// Define any fields you might need inside here.
+	int id;				//thread id
+	int running;			//0 if thread is not running, 1 if it is
+	void* (*start_routine)(void*);	//the function we begin the thread at
+	void* args;			//the arguments to pass the function we move to
+	ucontext_t* this_context;	//the context belonging to this thread
 } mypthread_t;
 
 typedef struct {
 	// Define any fields you might need inside here.
+	int stack_size;			//size of the stack, obviously
+	char* stack;			//the stack frame of the thread
 } mypthread_attr_t;
 
 // Functions
@@ -33,15 +42,15 @@ int mypthread_join(mypthread_t thread, void **retval);
 typedef int mypthread_mutex_t;
 typedef int mypthread_mutexattr_t;
 
-inline int mypthread_mutex_init(mypthread_mutex_t *mutex,
+static inline int mypthread_mutex_init(mypthread_mutex_t *mutex,
 			const mypthread_mutexattr_t *attr) { return 0; }
 
-inline int mypthread_mutex_destroy(mypthread_mutex_t *mutex) { return 0; }
+static inline int mypthread_mutex_destroy(mypthread_mutex_t *mutex) { return 0; }
 
-inline int mypthread_mutex_lock(mypthread_mutex_t *mutex) { return 0; }
+static inline int mypthread_mutex_lock(mypthread_mutex_t *mutex) { return 0; }
 
-inline int mypthread_mutex_trylock(mypthread_mutex_t *mutex) { return 0; }
+static inline int mypthread_mutex_trylock(mypthread_mutex_t *mutex) { return 0; }
 
-inline int mypthread_mutex_unlock(mypthread_mutex_t *mutex) { return 0; }
+static inline int mypthread_mutex_unlock(mypthread_mutex_t *mutex) { return 0; }
 
 #endif
