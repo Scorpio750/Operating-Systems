@@ -7,6 +7,7 @@
 
 int initialize_array(char*);
 double loop_through(char*, int, int);
+void begin_loop(void);
 
 int pow_27() {
 	int i;

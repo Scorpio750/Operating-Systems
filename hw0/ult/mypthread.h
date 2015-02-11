@@ -2,28 +2,36 @@
 #define H_MYPTHREAD
 
 #include <ucontext.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define ARRAYSIZE 10
+#define STACKSIZE 8200
 
 // Types
 typedef struct {
-	// Define any fields you might need inside here.
-	int id;				//thread id
-	int running;			//0 if thread is not running, 1 if it is
-	void* (*start_routine)(void*);	//the function we begin the thread at
-	void* args;			//the arguments to pass the function we move to
-	ucontext_t* this_context;	//the context belonging to this thread
+	int run_state; // 1 = running
+	int exists; // 1 = exists
+	int id;
+	void *(*start_routine)(void*);
+	void *arg;
+	ucontext_t context;
 } mypthread_t;
 
 typedef struct {
-	// Define any fields you might need inside here.
-	int stack_size;			//size of the stack, obviously
-	char* stack;			//the stack frame of the thread
+	//int stack_size;
+	//char *stack;
 } mypthread_attr_t;
+
+mypthread_t *thread_array[ARRAYSIZE];
+int count;
 
 // Functions
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr,
 			void *(*start_routine) (void *), void *arg);
 
-void mypthread_exit(void *retval);
+void mypthread_exit(void *retval, mypthread_t *thread);
 
 int mypthread_yield(void);
 
