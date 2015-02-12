@@ -49,7 +49,7 @@ void begin_loop() {
 }
 
 int main(int argc, char *argv[]) {
-	//begin_loop();
+	begin_loop();
 	printf("Cache Block/Lines Size: 10 B\n");
 	printf("Cache Size: 1024 KB\n");
 	printf("Cache Miss Penalty: 1539759 us\n");
