@@ -14,7 +14,7 @@ y_coord = list()
 
 for line in file:
 	string_list = line.split()
-	x_coord.append(string_list[interval_position])
-	y_coord.append(string_list[time_position])
+	x_coord.append(string_list[time_position])
+	y_coord.append(string_list[interval_position])
 plot_t.scatter(x_coord, y_coord)
 plot_t.show()

@@ -38,5 +38,9 @@ int main(int argc, char *argv[]) {
 		loop(i);
 	}
 
+	printf("Cache Block/Line Size: B\n");
+	printf("Cache Size: 256KB\n");
+	printf("Cache Miss Penalty: us\n");
+
 	return 0;
 }
