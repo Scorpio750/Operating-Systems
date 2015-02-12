@@ -1,22 +1,32 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
+#define STACKSIZE 8192
+#define THREADCEILING 1024
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ucontext.h>
+
+static ucontext_t main_program;
+static int main_set_up;
 
 // Types
 typedef struct {
 	// Define any fields you might need inside here.
 	int id;				//thread id
 	int running;			//0 if thread is not running, 1 if it is
+	int finished;			//0 if thread is not finished, 1 if it is
 	void* (*start_routine)(void*);	//the function we begin the thread at
 	void* args;			//the arguments to pass the function we move to
-	ucontext_t* this_context;	//the context belonging to this thread
+	ucontext_t this_context;	//the context belonging to this thread
 } mypthread_t;
 
 typedef struct {
 	// Define any fields you might need inside here.
-	int stack_size;			//size of the stack, obviously
-	char* stack;			//the stack frame of the thread
+	//int stack_size;		//size of the stack, obviously
+	//char* stack;			//the stack frame of the thread
 } mypthread_attr_t;
 
 // Functions
@@ -29,6 +39,13 @@ int mypthread_yield(void);
 
 int mypthread_join(mypthread_t thread, void **retval);
 
+int get_id(void);
+
+int get_next_thread(void);
+
+mypthread_t* thread_list[THREADCEILING];
+static int current_thread_index;
+static int create_thread_index;
 
 /* Don't touch anything after this line.
  *
