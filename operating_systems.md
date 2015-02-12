@@ -159,3 +159,159 @@ Food Pyramid
 - How do we implement yield?
 	- swap_context(src, scheduler)
 	- Scheduler can round-robin
+	
+---
+## 2/3/15
+
+### Major Issues in OS Design
+
+- Performance
+- Reliability
+- Persistence: how can we make data last beyond program execution?
+- Accounting: how to keep track of resource usage
+- Distribution
+- Scaling: how do we keep OS efficient and reliable as the offered load increases
+- Security
+
+### Architecture Refresher
+
+- Single-CPU chip computer
+- Single-threaded
+- Multithreaded
+- Multi/many-core
+
+[!insert picture from slides]
+
+### Memory Hierarchy
+
+CPU (word transfer)$$$\to$$$ cache (block transfer)$$$\to$$$ main memory (page transfer)$$$\to$$$ disk
+
+- As you go right, you:
+	- Decrease cost/bit
+	- Increase capacity
+	- Increase access time
+	- Increase size of transfer unit
+	- Decrease frequency of access
+	
+### Hardware Caches
+
+- Motivated by the mismatch b/w processor and memory speed
+- Closer to the processor than main memory
+- Smaller and faster than main memory
+- Act as "attraction memory": contains value of main memory (temporal locality)
+- Transfer between caches and main memory is performed in units called cache blocks/lines
+- Spatial locality
+- Associative caches trade shorter lookup for collisions
+- Write-throughs/write-backs
+- Write-backs don't go to memory
+- Cache lines become *dirty* when you have to write through the entire line back to memory
+- Replacement algorithm: direct or LRU
+- Each core in a CPU has its own L1 cache
+- **Snooping Caches:** snoop for activity in a cache line, sees what information it can access
+	- Invalidates writes, grabs reads(?)
+
+### Multi-CPU-chip Multiprocessors
+
+- Simple scheme (SMP): more than one CPU on the same bus
+- Memory is shared among CPUs - cache coherence between LLCs
+- Problems with locality
+- Thread migration vs. page migration
+- Page replication
+- Affinity scheduling
+
+### Fetch-Decode-Execute
+
+- Computer is a large, general-purpose calculator
+- Fetches instructions, decodes them, and executes them
+
+### Processor Modes
+
+- System mode is privileged mode
+- User mode is unprivileged
+- Certain instructions can only be executed in system mode
+- Special registers holds which mode the CPU is in
+- OS is in charge of changing modes
+
+#### Simple Protection Scheme
+
+- Addresses < 100 are reserved for OS use
+- Mode register provided
+	- 0 = SYS = system mode
+	- 1 = USR = CPU is executing in user mode
+- Hardware does this check
+	- On every fetch, if the mode bit is USR and the address is less than 100, do not execute in OS mode
+	
+---
+
+## Signals
+
+- Asynchronous interprocess communication
+
+		sighandler_t signal(int signum, sighandler_t handler
+- Called using a wrapper function
+- Example of indirection
+
+---
+
+2/6/15
+
+## Stack Frame
+
+- Built into the hardware
+- Program counter is pushed on the stack whenever a function is called
+- base pointer points to the old bp when you pop it
+- This gives you a *dynamic chain* of calls
+- Stack frame = activation record
+
+# Cor$$$\mathbb{DAMN YOU ALISON}$$$outines
+
+- swap context uses ucontext
+- These are used to modify user threads
+- First time you create a thread, create 2
+	- One for main and a new thread
+- OS only tkaes control of the machine because of an interrupt or a system call
+
+---
+## 2/9/15
+
+### F-D-E with Exceptions
+
+- 60 is the well-known entry point for mem violation
+- 64 is entry point for mode register violation
+
+### Traps
+
+- Traps force PC to a known address and sets mode to system mode
+- Unlike exceptions, trps carry some arguments to the OS
+- Foundation of the *system call*
+- To get back to user mode, most machines have a *return from exception* instruction
+	- sets PC to PC'
+	- sets mode bit to user mode
+- Traps and excpetions use the same mechanism
+
+### Interrupts
+
+- How can we force CPU back into system mode if the user program is off computing something/
+	- Solution: Interrupts
+- Interupt is an external event that causes the CPU to jump to a known address
+- Link and interrupt to a periodic clock
+- Modify FDE loop to check an external line set periodically by the clock
+- Keyboard presses are interrupts (?)
+- Problem arises when the interrupt is received while the process is handling some process that cannot be interrupted (i.e. data structures will be destroyed)
+
+### Entry Points
+
+- What are the "entry points" for our example machine?
+	- 60: memory access violation
+	- 64: entry point for mode register 
+	- 68: user initiated trap
+	- 72: 
+
+### Program I/O (PIO)
+	
+### Direct Memory Acces (DMA)
+
+- PIO is a direct check against status register, then send or receive
+- DMA must set up base count, check status
+
+### Booting
