@@ -16,8 +16,7 @@ static int main_set_up;
 typedef struct {
 	// Define any fields you might need inside here.
 	int id;				//thread id
-	int running;			//0 if thread is not running, 1 if it is
-	int finished;			//0 if thread is not finished, 1 if it is
+	int state;			//0 if dead, 1 if running, 2 if blocked
 	void* (*start_routine)(void*);	//the function we begin the thread at
 	void* args;			//the arguments to pass the function we move to
 	ucontext_t this_context;	//the context belonging to this thread

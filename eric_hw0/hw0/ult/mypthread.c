@@ -20,7 +20,7 @@ int mypthread_create(mypthread_t* thread, const mypthread_attr_t* attr, void* (*
 		return -1;
 	}
 
-	thread->running = 0;
+	thread->state = 2;
 	stack = malloc(sizeof(char) * STACKSIZE);
 	
 	//printf("Creating context...\n");
@@ -46,8 +46,7 @@ void mypthread_exit(void* retval) {
 	int current_id;
 	current_id = thread_list[current_thread_index]->id;
 
-	thread_list[current_thread_index]->running = 0;
-	thread_list[current_thread_index]->finished = 1;
+	thread_list[current_thread_index]->state = 0;
 
 	swapcontext(&(thread_list[current_thread_index]->this_context), &main_program);
 }
@@ -72,8 +71,8 @@ int mypthread_yield() {
 	next_thread = thread_list[current_thread_index + 1];
 
 	printf("Changing running boolean...\n");
-	current_thread->running = 0;
-	next_thread->running = 1;
+	current_thread->state = 2;
+	next_thread->state = 1;
 
 	swapcontext(&(thread_list[prev_id]->this_context), &(thread_list[next_id]->this_context));
 
@@ -93,7 +92,7 @@ int get_id() {
 		if(i >= THREADCEILING) {
 			current_thread_index = 0;
 		}
-		if(thread_list[i] == NULL || thread_list[i]->finished == 1) {
+		if(thread_list[i] == NULL || thread_list[i]->state == 0) {
 			//printf("Generation successful!\n");
 			create_thread_index = i;
 			return create_thread_index;
@@ -110,7 +109,7 @@ int get_next_thread() {
 		if(i >= THREADCEILING) {
 			current_thread_index = 0;
 		}
-		if(thread_list[i] != NULL && thread_list[i]->finished != 1) {
+		if(thread_list[i] != NULL && thread_list[i]->state != 0) {
 			//printf("Generation successful!\n");
 			current_thread_index = i;
 			return current_thread_index;
