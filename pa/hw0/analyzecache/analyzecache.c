@@ -28,6 +28,11 @@ Cache* loop (int interval, Cache* cache_info) {
 	return cache_info;
 }
 
+int convert_to_MB(long interval) {
+	return (2^interval/1024/1024);
+}
+
+
 int main(int argc, char *argv[]) {
 	Cache *cache_info = malloc(sizeof(Cache));
 	array = malloc(sizeof(char) * array_size);
@@ -36,6 +41,7 @@ int main(int argc, char *argv[]) {
 	long prevtime = -1L;
 	long cachesize = -1L;
 	long diff;
+	int mb;
 
 	for (i = 0; i < array_size; i++) {
 		array[i] = (char)i;
@@ -56,14 +62,16 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 	}
+	
+	mb = convert_to_MB(cache_info->interval);
 
 	/* output */
 	if (cache_info->total_time == -1L) {
 		printf("Your cache appears to have gone missing.\nPlease stand by as we attempt to retrieve it...\n");
 	}
 	else {
-		printf("Cache Block/Line Size: %d\nCache Size: %d\nCache Miss Penalty: %ld\n",
-				cache_info->interval,/* FILL THIS IN HERE */2^(cache_info->interval), cache_info->diff);
+		printf("Cache Block/Line Size: %d\nCache Size: %dMB\nCache Miss Penalty: %ldµs\n",
+				cache_info->interval, mb, cache_info->diff);
 	}
 
 	free(cache_info);
