@@ -23,7 +23,7 @@ Cache* loop (int interval, Cache* cache_info) {
 	long end_time = end.tv_sec * 1000000 + end.tv_usec;
 	long start_time = start.tv_sec * 1000000 + start.tv_usec;
 	cache_info->total_time = end_time - start_time;
-	printf("Interval: %d\tTotal Time: %ld\n", interval, cache_info->total_time);
+	//printf("Interval: %d\tTotal Time: %ld\n", interval, cache_info->total_time);
 	cache_info->interval = interval;
 	return cache_info;
 }
@@ -41,12 +41,15 @@ int main(int argc, char *argv[]) {
 		array[i] = (char)i;
 	}
 
+	printf("Testing for cache miss...\n");
 	for(i = 1; i < to_the_twenty; i *= 2) {
-		if (prevtime == -1L && i != 1) {
+		if (i != 1) {
 			prevtime = cache_info->total_time;
 		}
 		cache_info = loop(i, cache_info);
-		// test for cache miss
+		// printf("PREV TIME: %ld\nCURR TIME: %ld\n", prevtime, cache_info->total_time);
+		
+		/* test for cache miss */
 		diff = cache_info->total_time - prevtime; 
 		if (diff > prevtime * .5 && prevtime != -1L) {
 			cache_info->diff = diff;	
@@ -54,13 +57,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	// output
+	/* output */
 	if (cache_info->total_time == -1L) {
 		printf("Your cache appears to have gone missing.\nPlease stand by as we attempt to retrieve it...\n");
 	}
 	else {
-		printf("Cache Block/Line Size: %d\nCache Size: %ld\nCache Miss Penalty: %ld\n",
-				cache_info->interval,/* FILL THIS IN HERE */-1, cache_info->diff);
+		printf("Cache Block/Line Size: %d\nCache Size: %d\nCache Miss Penalty: %ld\n",
+				cache_info->interval,/* FILL THIS IN HERE */2^(cache_info->interval), cache_info->diff);
 	}
 
 	free(cache_info);
