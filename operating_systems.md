@@ -315,3 +315,23 @@ CPU (word transfer)$$$\to$$$ cache (block transfer)$$$\to$$$ main memory (page t
 - DMA must set up base count, check status
 
 ### Booting
+
+---
+
+## 2/12/15
+
+## OS Architecture
+
+- Refers to the segment register and the offset register as a *pair*
+- There is a **thread/interrupt gate**, size 2 words, which access a segment register table(?)
+- The selector is an index into a segment descriptor, described as **0900**
+- In your address space, your stack frame (in xv6) is a fixed width,our heap starst after that and grows as necessary
+- Given two processes *p1* and *p2*, and their respective address spaces in physical memory, there is a block of memory at the end of physical memory reserved for I/O
+	- this is not actually physical memory
+- Program 0 in address space is the *kernel*
+	- This consists of the kernel code, above the kernal data
+- Every time you have a system call you have to change the address space to the one where the handler resides
+	- Every time it does this, the processor has to translate from virtual to physical space, which is costly
+- To avoid this, we duplicate the kernal code/data into each process table, to avoid reloading information into the caches (pollution)
+- Think of the kernel as a multithreaded program, with a different thread for each process
+- The kernel stack of any process is in every process
