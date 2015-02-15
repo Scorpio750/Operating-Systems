@@ -10,8 +10,8 @@ void nullify_array() {
 
 void run_fnc (mypthread_t *thread) {
 	fprintf(stderr, ">>running function\n");
-	thread->retval = thread->start_routine(thread->arg);
 	thread->state = 2;
+	thread->retval = thread->start_routine(thread->arg);
 	free(thread->context.uc_stack.ss_sp);
 	fprintf(stderr, "entering yield from run_fnc\n");
 	mypthread_yield();

@@ -1,7 +1,6 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
-//#define _XOPEN_SOURCE
 #define ARRAYSIZE 50
 #define STACKSIZE 8200
 
