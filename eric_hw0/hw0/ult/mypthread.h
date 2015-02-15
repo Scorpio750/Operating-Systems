@@ -15,11 +15,11 @@ static int main_set_up;
 // Types
 typedef struct {
 	// Define any fields you might need inside here.
-	int id;				//thread id
-	int state;			//0 if dead, 1 if running, 2 if blocked
+	int* id;				//thread id
+	int* state;			//0 if dead, 1 if running, 2 if blocked
 	void* (*start_routine)(void*);	//the function we begin the thread at
 	void* args;			//the arguments to pass the function we move to
-	ucontext_t this_context;	//the context belonging to this thread
+	ucontext_t* this_context;	//the context belonging to this thread
 } mypthread_t;
 
 typedef struct {
