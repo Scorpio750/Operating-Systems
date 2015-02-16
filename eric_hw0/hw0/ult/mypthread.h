@@ -45,6 +45,9 @@ int get_next_thread(void);
 mypthread_t* thread_list[THREADCEILING];
 static int current_thread_index;
 static int create_thread_index;
+static int inThread; //0 for false, 1 for true
+static int toRun;
+static int total;
 
 /* Don't touch anything after this line.
  *
