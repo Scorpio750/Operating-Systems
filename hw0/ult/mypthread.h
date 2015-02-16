@@ -1,32 +1,37 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
-#define STACKSIZE 8192
-#define THREADCEILING 1024
+//#define _XOPEN_SOURCE
+#define ARRAYSIZE 50
+#define STACKSIZE 8200
 
+#include <ucontext.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ucontext.h>
-
-static ucontext_t main_program;
-static int main_set_up;
 
 // Types
 typedef struct {
-	// Define any fields you might need inside here.
-	int* id;				//thread id
-	int* state;			//0 if dead, 1 if running, 2 if blocked
-	void* (*start_routine)(void*);	//the function we begin the thread at
-	void* args;			//the arguments to pass the function we move to
-	ucontext_t* this_context;	//the context belonging to this thread
+	int state; // 0 = elligible, 1 = waiting, 2 = done
+	int id;
+	int wait_id;
+	void *retval;
+	void *(*start_routine)(void*);
+	void *arg;
+	ucontext_t context;
 } mypthread_t;
 
 typedef struct {
-	// Define any fields you might need inside here.
-	//int stack_size;		//size of the stack, obviously
-	//char* stack;			//the stack frame of the thread
+	//int stack_size;
+	//char *stack;
 } mypthread_attr_t;
+
+mypthread_t main_t;
+mypthread_t *thread_array[ARRAYSIZE];
+int create_count;
+int sched_count; //want to start at 1
+int main_count; // 0 = no main yet
+int num_thr;
 
 // Functions
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr,
@@ -38,16 +43,6 @@ int mypthread_yield(void);
 
 int mypthread_join(mypthread_t thread, void **retval);
 
-int get_id(void);
-
-int get_next_thread(void);
-
-mypthread_t* thread_list[THREADCEILING];
-static int current_thread_index;
-static int create_thread_index;
-static int inThread; //0 for false, 1 for true
-static int toRun;
-static int total;
 
 /* Don't touch anything after this line.
  *
