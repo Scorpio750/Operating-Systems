@@ -1,6 +1,7 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
+//#define _XOPEN_SOURCE
 #define ARRAYSIZE 50
 #define STACKSIZE 8200
 
@@ -30,6 +31,7 @@ mypthread_t *thread_array[ARRAYSIZE];
 int create_count;
 int sched_count; //want to start at 1
 int main_count; // 0 = no main yet
+int num_thr;
 
 // Functions
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr,
