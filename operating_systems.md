@@ -335,3 +335,61 @@ CPU (word transfer)$$$\to$$$ cache (block transfer)$$$\to$$$ main memory (page t
 - To avoid this, we duplicate the kernal code/data into each process table, to avoid reloading information into the caches (pollution)
 - Think of the kernel as a multithreaded program, with a different thread for each process
 - The kernel stack of any process is in every process
+
+---
+
+## 2/19/15
+
+## Interrupts
+
+	main () {
+	.
+	.
+	.
+	initializeIDT();
+	
+	for (;;) {
+		schedule();
+	}
+
+	divide_by_zero_handler() {
+		push ds;
+		push es;
+		push d;
+		call c_handler_divider()
+		allooooiio
+	}
+	
+	trap_handle() {
+		push things;
+		call c_trap_handler
+		pop things;
+		iret; // interrupt return 
+	}
+	
+	c_trap_handler(a) {
+		int *a;
+		switchc(*(a + TRAP_ID_OFF))
+			0: div_by_zero_handler
+			1: illegal_arg_handler()
+	}
+	
+	catch_divzero()(
+	j
+	}
+	
+	initialize(IDT) {
+		
+	}	
+	
+	vector0() {
+		push 0
+		call handler();
+		
+	}
+	vector 1()
+	push 1;
+	l h
+	
+- Processor encounters many impossible conditions in its pipeline, and it jumps to particular interrupts
+- Difference between exceptions encountered in the code and interrupts encountered from external devices
