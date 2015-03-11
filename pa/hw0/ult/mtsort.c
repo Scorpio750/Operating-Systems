@@ -30,13 +30,7 @@ static int quitting = 0;
 void * fnsort( void *arg );
 void * fncheck( void *arg );
 void printList( int *p, int size );
-int begin_app( void );
-int end_app( void );
 ////////////////////////////////////////////////////////////////////////////////
-int begin_app( void )
-{
-    return 0;
-}
 
 void *fnsort( void *arg )
 {
@@ -116,7 +110,7 @@ void * fncheck( void *arg )
         // j seconds
         j = j+1;
 #ifndef MYTHREAD
-        sleep( j );
+       // sleep( j );
 #endif
         mypthread_yield( );
     }
@@ -214,8 +208,4 @@ int main( int argc, char **argv )
     return 0;
 }
 
-int end_app( void )
-{
-    return 0;
-}
 // eof

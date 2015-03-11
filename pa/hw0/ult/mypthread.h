@@ -1,19 +1,21 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
 
+//#define _XOPEN_SOURCE
+#define ARRAYSIZE 1024
+#define STACKSIZE 8200
+
 #include <ucontext.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define ARRAYSIZE 10
-#define STACKSIZE 8200
-
 // Types
 typedef struct {
-	int run_state; // 1 = running
-	int exists; // 1 = exists
+	int state; // 0 = elligible, 1 = waiting, 2 = done
 	int id;
+	int wait_id;
+	void *retval;
 	void *(*start_routine)(void*);
 	void *arg;
 	ucontext_t context;
@@ -24,14 +26,18 @@ typedef struct {
 	//char *stack;
 } mypthread_attr_t;
 
+mypthread_t main_t;
 mypthread_t *thread_array[ARRAYSIZE];
-int count;
+int create_count;
+int sched_count; //want to start at 1
+int main_count; // 0 = no main yet
+int num_thr;
 
 // Functions
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr,
 			void *(*start_routine) (void *), void *arg);
 
-void mypthread_exit(void *retval, mypthread_t *thread);
+void mypthread_exit(void *retval);
 
 int mypthread_yield(void);
 
